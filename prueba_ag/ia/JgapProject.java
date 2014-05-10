@@ -32,7 +32,7 @@ public class JgapProject {
 
     public static int CANT_EVOLUCIONES = 10000;
     public static int POBLACION = 50;
-    private static File file = new File("c:\\resultadoTPAG.txt");
+    private static File file = new File("c:\\Users\\Usuario\\Documents\\NetBeansProjects\\JgapProject\\resultadoTPAG.txt");
     private static BufferedWriter buf;
 
     static {
@@ -50,8 +50,8 @@ public class JgapProject {
      */
     public static void main(String[] args) throws InvalidConfigurationException, IOException {
 
-        POBLACION = 10000;
-        CANT_EVOLUCIONES = 5000;
+        POBLACION = 120;
+        CANT_EVOLUCIONES = 50;
 //		if (args.length == 2)
 //                {
 //			POBLACION = new Integer (args[0]);
@@ -133,8 +133,9 @@ public class JgapProject {
                 List<Chromosome> aMutar = pop.determineFittestChromosomes(POBLACION);
                 mutador.operate(pop, aMutar);
             }
-            //imprimirPoblacion(poblacion);
+            imprimirPoblacion(poblacion);
 
+            imprimirPoblacionConsola(poblacion);
             //solo imprime los cambios
 //			if(antfitnes != elMasMejor.getFitnessValue()){
 //				Float dif = FactorsFitness.getValorCromosoma(elMasMejor) - resultadoBuscado;
@@ -170,6 +171,47 @@ public class JgapProject {
 //		imprimirPoblacion(poblacion);
 
 //		buf.close();
+    }
+
+    private static void imprimirPoblacion(Genotype poblacion) throws IOException {
+        Population pop = poblacion.getPopulation();
+
+        List<Chromosome> chromos = pop.determineFittestChromosomes(POBLACION + 2);
+        buf.write("Poblacion: " + pop.size() + "\n");
+
+        for (Chromosome cromosoma : chromos) {
+            String item = getChromosomeValue(cromosoma);
+            buf.write(item + "\n");
+        }
+        buf.write("\n\n");
+    }
+
+    private static void imprimirPoblacionConsola(Genotype poblacion) {
+
+        Population pop = poblacion.getPopulation();
+
+        List<Chromosome> chromos = pop.determineFittestChromosomes(POBLACION + 2);
+        System.out.println("poblacion: " + pop.size());
+
+        for (Chromosome cromosoma : chromos) {
+            String item = getChromosomeValue(cromosoma);
+            System.out.print(item + " ");
+            System.out.println();
+        }
+        System.out.println();
+
+    }
+
+    public static String getChromosomeValue(Chromosome cromosoma) {
+        int barrio = ApartmentsFitness.obtenerValorGen(cromosoma, 0);
+        int distancia = ApartmentsFitness.obtenerValorGen(cromosoma, 1);
+        int antiguedad = ApartmentsFitness.obtenerValorGen(cromosoma, 2);
+        int precio = ApartmentsFitness.obtenerValorGen(cromosoma, 3);
+        int ambientes = ApartmentsFitness.obtenerValorGen(cromosoma, 4);
+
+        String item = "Barrio: " + barrio + " Distancia al subte: " + distancia + " Antiguedad: " + antiguedad + " Precio: " + precio + " Ambientes: " + ambientes;
+
+        return item;
     }
 
     public static String getLocationString(int locationId) {
