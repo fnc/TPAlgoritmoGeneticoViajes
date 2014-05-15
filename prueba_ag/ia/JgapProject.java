@@ -32,6 +32,7 @@ public class JgapProject {
 
     public static int CANT_EVOLUCIONES = 10000;
     public static int POBLACION = 50;
+    /*
     private static File file = new File("c:\\Users\\Usuario\\Documents\\NetBeansProjects\\JgapProject\\resultadoTPAG.txt");
     private static BufferedWriter buf;
 
@@ -42,7 +43,7 @@ public class JgapProject {
             e.printStackTrace();
         }
     }
-
+*/
     /**
      * @param args
      * @throws InvalidConfigurationException 
@@ -50,8 +51,8 @@ public class JgapProject {
      */
     public static void main(String[] args) throws InvalidConfigurationException, IOException {
 
-        POBLACION = 120;
-        CANT_EVOLUCIONES = 50;
+        POBLACION = 12;
+        CANT_EVOLUCIONES = 15;
 //		if (args.length == 2)
 //                {
 //			POBLACION = new Integer (args[0]);
@@ -74,7 +75,46 @@ public class JgapProject {
         System.out.println("--   Resultado total de ejecucion: c:\\resultadoTPAG.txt  --");
         System.out.println("-----------------------------------------------------------");
 
-        Configuration conf = new DefaultConfiguration();
+        AG()
+        
+        
+        }
+
+        Gene[] g = masApto.getGenes();
+        System.out.println("Aptitud: " + masApto.getFitnessValue());
+        System.out.println("Barrio: " + getLocationString((Integer) g[0].getAllele()));
+        System.out.println("Cercania al subte: " + getDistanceToSubwayString((Integer) g[1].getAllele()));
+        System.out.println("Antiguedad: " + getYearsString((Integer) g[2].getAllele()));
+        System.out.println("Precio: " + getPriceString((Integer) g[3].getAllele()));
+        System.out.println("Cantidad de ambientes: " + getNumberOfRoomsString((Integer) g[4].getAllele()));
+
+//		Float f = new Float(((ApartmentsFitness)ff).getValorCromosoma(masApto));
+//		System.out.println("Mejor Valor obtenido: " + f.longValue());
+
+        System.out.println();
+        //imprimo toda la poblacion
+//		imprimirPoblacion(poblacion);
+
+//		buf.close();
+    }
+/*
+
+    private static void imprimirPoblacion(Genotype poblacion) throws IOException {
+        Population pop = poblacion.getPopulation();
+
+        List<Chromosome> chromos = pop.determineFittestChromosomes(POBLACION + 2);
+        buf.write("Poblacion: " + pop.size() + "\n");
+
+        for (Chromosome cromosoma : chromos) {
+            String item = getChromosomeValue(cromosoma);
+            buf.write(item + "\n");
+        }
+        buf.write("\n\n");
+    }
+*/
+    
+    private static void AG(){
+    	Configuration conf = new DefaultConfiguration();
 
         FitnessFunction ff = new ApartmentsFitness();
         conf.setFitnessFunction(ff);
@@ -133,7 +173,7 @@ public class JgapProject {
                 List<Chromosome> aMutar = pop.determineFittestChromosomes(POBLACION);
                 mutador.operate(pop, aMutar);
             }
-            imprimirPoblacion(poblacion);
+//            imprimirPoblacion(poblacion);
 
             imprimirPoblacionConsola(poblacion);
             //solo imprime los cambios
@@ -146,46 +186,15 @@ public class JgapProject {
 //				antfitnes = elMasMejor.getFitnessValue();
 //			}
             //si encuentro el valor corto la busqueda
-//			if(FactorsFitness.getValorCromosoma(masApto) == resultadoBuscado)
-//                        {
-//				System.out.println("###############################################################################");
-//				System.out.println("## R E S U L T A D O   E N C O N T R A D O !! cantidad de evoluciones: " + i);
-//				System.out.println("###############################################################################");
-//				break;
-//			}
-        }
-
-        Gene[] g = masApto.getGenes();
-        System.out.println("Aptitud: " + masApto.getFitnessValue());
-        System.out.println("Barrio: " + getLocationString((Integer) g[0].getAllele()));
-        System.out.println("Cercania al subte: " + getDistanceToSubwayString((Integer) g[1].getAllele()));
-        System.out.println("Antiguedad: " + getYearsString((Integer) g[2].getAllele()));
-        System.out.println("Precio: " + getPriceString((Integer) g[3].getAllele()));
-        System.out.println("Cantidad de ambientes: " + getNumberOfRoomsString((Integer) g[4].getAllele()));
-
-//		Float f = new Float(((ApartmentsFitness)ff).getValorCromosoma(masApto));
-//		System.out.println("Mejor Valor obtenido: " + f.longValue());
-
-        System.out.println();
-        //imprimo toda la poblacion
-//		imprimirPoblacion(poblacion);
-
-//		buf.close();
+			if(masApto.getFitnessValue() == 50.0)
+                        {
+				System.out.println("###############################################################################");
+				System.out.println("## R E S U L T A D O   E N C O N T R A D O !! cantidad de evoluciones: " + i);
+				System.out.println("###############################################################################");
+				break;
+			}
     }
-
-    private static void imprimirPoblacion(Genotype poblacion) throws IOException {
-        Population pop = poblacion.getPopulation();
-
-        List<Chromosome> chromos = pop.determineFittestChromosomes(POBLACION + 2);
-        buf.write("Poblacion: " + pop.size() + "\n");
-
-        for (Chromosome cromosoma : chromos) {
-            String item = getChromosomeValue(cromosoma);
-            buf.write(item + "\n");
-        }
-        buf.write("\n\n");
-    }
-
+    
     private static void imprimirPoblacionConsola(Genotype poblacion) {
 
         Population pop = poblacion.getPopulation();
