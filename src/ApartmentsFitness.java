@@ -21,8 +21,18 @@ public class ApartmentsFitness extends FitnessFunction
             result += this.evaluarAntiguedad(cromosoma);
             result += this.evaluarPrecioAlquiler(cromosoma);
             result += this.evaluarCantidadAmbientes(cromosoma);
-            
+            result += this.evaluarCostoPorAmbiente(cromosoma);
+            result += this.evaluarProbabilidadQueExista(cromosoma);
+            if(result< 0){
+            	result = 0;
+            }
             return result;
+	}
+    public static double evaluar(IChromosome cromosoma) {            
+        ApartmentsFitness af = new ApartmentsFitness();
+        
+    	double fitness = af.evaluate(cromosoma);
+    	return fitness;
 	}
         
         public int evaluarUbicacion( IChromosome unaMuestra )
@@ -32,10 +42,7 @@ public class ApartmentsFitness extends FitnessFunction
 	        int puntos = 0;
 	        
 	        switch (ubicacion){
-	        case 1:{
-	        	//INVALIDA
-	        	break;
-	        }
+
 	        case 2:{
 	        	//Almagro
 	        	puntos += 7;
@@ -61,11 +68,10 @@ public class ApartmentsFitness extends FitnessFunction
 	        	puntos += 1;
 	        	break;
 	        }
-	        case 7:{
-	        	//INVALIDA
-	        	break;
-	        }
+
 	        default:{
+	        	//INVALIDA
+	        	puntos = -40;
 	        	break;
 	        }
 	        }
@@ -107,7 +113,8 @@ public class ApartmentsFitness extends FitnessFunction
 	        }
 
 	        default:{
-	        	//INVALIDO
+	        	//INVALIDA
+	        	puntos = -40;
 	        	break;
 	        }
 	        }
@@ -143,7 +150,8 @@ public class ApartmentsFitness extends FitnessFunction
 	        	break;
 	        }
 	        default:{
-	        	//INVALIDO
+	        	//INVALIDA
+	        	puntos = -40;
 	        	break;
 	        }
 	        }
@@ -185,12 +193,37 @@ public class ApartmentsFitness extends FitnessFunction
 	        	break;
 	        }
 	        default:{
-	        	//INVALIDO
+	        	//INVALIDA
+	        	puntos = -40;
 	        	break;
 	        }
 	        }
 	        return puntos;
 	    }
+         
+         public int evaluarCostoPorAmbiente( IChromosome unaMuestra ){
+ 	    	//La posicion 4 corresponde a la cantidad de ambientes ( le sumo 1 para que nunca sea 0)
+ 	        int ambientes = this.evaluarCantidadAmbientes(unaMuestra);
+ 	       int precio = this.evaluarPrecioAlquiler(unaMuestra)+1;
+ 	        int puntos = (int)(10*(ambientes / precio));
+        	if (precio<0&&ambientes<0){
+        		puntos = puntos * (-1);
+        	} 
+        	 return puntos;
+         }
+         public int evaluarProbabilidadQueExista( IChromosome unaMuestra ){
+
+ 	       int precio = this.evaluarPrecioAlquiler(unaMuestra);
+ 	       int ubicacion = this.evaluarUbicacion(unaMuestra)+1;
+	        int puntos = 0;
+	        //si el precio es muy bueno y la ubicacion tambien suma menos puntos
+	        puntos =(int)(10*(precio/ubicacion)); 
+        	if (precio<0&&ubicacion<0){
+        		puntos = puntos * (-1);
+        	}  
+	        
+	        return puntos;
+         }
          
           public int evaluarCantidadAmbientes( IChromosome unaMuestra )
 	    {
@@ -221,7 +254,8 @@ public class ApartmentsFitness extends FitnessFunction
 	        	break;
 	        }
 	        default:{
-	        	//INVALIDO
+	        	//INVALIDA
+	        	puntos = -40;
 	        	break;
 	        }
 	        }

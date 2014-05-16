@@ -51,8 +51,8 @@ public class JgapProject {
      */
     public static void main(String[] args) throws InvalidConfigurationException, IOException {
 
-        POBLACION = 12;
-        CANT_EVOLUCIONES = 15;
+        POBLACION = 10;
+        CANT_EVOLUCIONES = 20000;
 //		if (args.length == 2)
 //                {
 //			POBLACION = new Integer (args[0]);
@@ -164,7 +164,8 @@ public class JgapProject {
 
 
         IChromosome masApto = null;
-        for (int i = 0; i < CANT_EVOLUCIONES; i++) {
+        int i = 0 ;
+        for ( i = 0; i < CANT_EVOLUCIONES; i++) {
 
             poblacion.evolve();
             masApto = poblacion.getFittestChromosome();
@@ -190,14 +191,15 @@ public class JgapProject {
 //			}
             //si encuentro el valor corto la busqueda
             double fitnessValue = masApto.getFitnessValue();
-            if(fitnessValue == 50.0)
-                        {
-				System.out.println("###############################################################################");
-				System.out.println("## R E S U L T A D O   E N C O N T R A D O !! cantidad de evoluciones: " + i);
-				System.out.println("###############################################################################");
-				break;
-			}
+//            if(fitnessValue == 50.0)
+//                        {
+//				System.out.println("###############################################################################");
+//				System.out.println("## R E S U L T A D O   E N C O N T R A D O !! cantidad de evoluciones: " + i);
+//				System.out.println("###############################################################################");
+//				break;
+//			}
         }
+        System.out.println("--------------||Cantidad de evoluciones: " + i);
         return masApto;
     }
     
@@ -211,8 +213,6 @@ public class JgapProject {
         for (Chromosome cromosoma : chromos) {
             String item = getChromosomeValue(cromosoma);
             System.out.print(item + " ");
-            chromos.
-            System.out.println("\\___________Aptitud:" + fitnessValue);
             System.out.println();
         }
         System.out.println();
@@ -225,8 +225,9 @@ public class JgapProject {
         int antiguedad = ApartmentsFitness.obtenerValorGen(cromosoma, 2);
         int precio = ApartmentsFitness.obtenerValorGen(cromosoma, 3);
         int ambientes = ApartmentsFitness.obtenerValorGen(cromosoma, 4);
+        double fitness = ApartmentsFitness.evaluar(cromosoma);
 
-        String item = "Barrio: " + barrio + " Distancia al subte: " + distancia + " Antiguedad: " + antiguedad + " Precio: " + precio + " Ambientes: " + ambientes;
+        String item = "Barrio: " + barrio + " Distancia al subte: " + distancia + " Antiguedad: " + antiguedad + " Precio: " + precio + " Ambientes: " + ambientes+ "||Aptitud:"+fitness;
 
         return item;
     }
@@ -262,6 +263,7 @@ public class JgapProject {
                 break;
             }
             default: {
+            	location = "INVALIDA";
                 break;
             }
         }
@@ -302,6 +304,7 @@ public class JgapProject {
 
             default: {
                 //INVALIDO
+            	distance = "INVALIDA";
                 break;
             }
         }
@@ -336,6 +339,7 @@ public class JgapProject {
             }
             default: {
                 //INVALIDO
+            	distance = "INVALIDO";
                 break;
             }
         }
@@ -376,6 +380,7 @@ public class JgapProject {
             }
             default: {
                 //INVALIDO
+            	priceString = "INVALIDO";
                 break;
             }
         }
@@ -410,6 +415,7 @@ public class JgapProject {
             }
             default: {
                 //INVALIDO
+            	numberOfRooms = "INVALIDO";
                 break;
             }
         }
