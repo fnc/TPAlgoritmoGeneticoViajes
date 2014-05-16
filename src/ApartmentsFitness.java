@@ -13,7 +13,7 @@ public class ApartmentsFitness extends FitnessFunction
 {
     	@Override
 	protected double evaluate(IChromosome cromosoma) 
-        {
+        {	//Empiezan todos con 50 puntos
             double result = 0;
             
             result += this.evaluarUbicacion(cromosoma);
@@ -71,7 +71,7 @@ public class ApartmentsFitness extends FitnessFunction
 
 	        default:{
 	        	//INVALIDA
-	        	puntos = -40;
+	        	puntos = -50;
 	        	break;
 	        }
 	        }
@@ -114,7 +114,7 @@ public class ApartmentsFitness extends FitnessFunction
 
 	        default:{
 	        	//INVALIDA
-	        	puntos = -40;
+	        	puntos = -50;
 	        	break;
 	        }
 	        }
@@ -151,7 +151,7 @@ public class ApartmentsFitness extends FitnessFunction
 	        }
 	        default:{
 	        	//INVALIDA
-	        	puntos = -40;
+	        	puntos = -50;
 	        	break;
 	        }
 	        }
@@ -194,7 +194,7 @@ public class ApartmentsFitness extends FitnessFunction
 	        }
 	        default:{
 	        	//INVALIDA
-	        	puntos = -40;
+	        	puntos = -50;
 	        	break;
 	        }
 	        }
@@ -255,7 +255,7 @@ public class ApartmentsFitness extends FitnessFunction
 	        }
 	        default:{
 	        	//INVALIDA
-	        	puntos = -40;
+	        	puntos = -50;
 	        	break;
 	        }
 	        }

@@ -52,7 +52,7 @@ public class JgapProject {
     public static void main(String[] args) throws InvalidConfigurationException, IOException {
 
         POBLACION = 10;
-        CANT_EVOLUCIONES = 20000;
+        CANT_EVOLUCIONES = 200;
 //		if (args.length == 2)
 //                {
 //			POBLACION = new Integer (args[0]);
@@ -133,11 +133,11 @@ public class JgapProject {
          * Cada caracteristica varia dentro de un rango posible en base al numero buscado
          */
         Gene[] genes = new Gene[5];
-        genes[0] = new IntegerGene(conf, 1, 7); //  Barrio 
-        genes[1] = new IntegerGene(conf, 0, 7); //  Cercania al subte
+        genes[0] = new IntegerGene(conf, 2, 6); //  Barrio 
+        genes[1] = new IntegerGene(conf, 2, 6); //  Cercania al subte
         genes[2] = new IntegerGene(conf, 0, 3); // Antiguedad
-        genes[3] = new IntegerGene(conf, 0, 7); //  Precio
-        genes[4] = new IntegerGene(conf, 0, 4); // Cantidad de ambientes
+        genes[3] = new IntegerGene(conf, 1, 5); //  Precio
+        genes[4] = new IntegerGene(conf, 0, 3); // Cantidad de ambientes
 
 
         Chromosome cromosoma = new Chromosome(conf, genes);
