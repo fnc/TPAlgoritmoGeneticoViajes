@@ -43,34 +43,42 @@ public class JgapProject {
     public static String pathLogFile;
 
     /**
-     * @param args
+     * @param args[0]Cantidad de evoluciones
+     * @param args[1]Metodo de selección
+     * @param args[0]Población inicial
      * @throws IOException 
      */
     public static void main(String[] args) throws InvalidConfigurationException, IOException {
 
-        POBLACION = 21;
-        CANT_EVOLUCIONES = 200;
         pathLogFile=System.getProperty("user.dir") + "\\Ejecucion TPAG - Grupo 5 - del dia " + dateNow() + " a las " + timeNow() + ".txt";
         
-        boolean metodoDeSeleccionInvalido=true;
+        boolean metodoDeSeleccionInvalido=false;
         
-        if(args.length>0){
-        	
-        	if (args[0].equals("ruleta")){
-        		SELECCION = 1;
+        if(args.length==3){
+        	try{
+        		CANT_EVOLUCIONES=Integer.parseInt(args[0]);
+
+        		if (args[1].equals("ruleta")){
+        			SELECCION = 1;
+        		}
+        		else if (args[1].equals("ranking")){
+        			SELECCION = 2;
+        		}
+        		else if (args[1].equals("torneo")){
+        			SELECCION = 3;
+        		}
+        		else{
+        			metodoDeSeleccionInvalido=true;
+        		}
+        		
+        		POBLACION=Integer.parseInt(args[2]);
+        		
+        	}catch(Exception e){
+        		metodoDeSeleccionInvalido=true;
         	}
-        	else if (args[0].equals("ranking")){
-        		SELECCION = 2;
-        	}
-        	else if (args[0].equals("torneo")){
-        		SELECCION = 3;
-        	}
-        	
-        	metodoDeSeleccionInvalido=false;
-        	
         }
         if (metodoDeSeleccionInvalido){
-        	System.out.println("Método de selección inválido, se debe pasar como parámetro el metodo de selección a utilizar \n (Debe ser uno de los siguientes tres : ruleta, ranking, torneo)");
+        	System.out.println("Parámetros invalidos.\n El primer parámetro debe ser la cantidad de evoluciones a realizar.\n El segundo parámetro debe ser el método de selección a utilizar (Debe ser uno de los siguientes tres : ruleta, ranking, torneo).\n El tercer parámetro debe ser la cantidad de individuos de la población inicial.");
     		return;
         }
         
