@@ -52,7 +52,7 @@ public class JgapProject {
 
         POBLACION = 21;
         CANT_EVOLUCIONES = 5;
-        SELECCION = 2;
+        SELECCION = 3;
 //		if (args.length == 2)
 //                {
 //			POBLACION = new Integer (args[0]);
@@ -150,7 +150,9 @@ public class JgapProject {
 //        conf.removeNaturalSelectors(false);
         if(SELECCION == 1)//Seleccion por ruleta
         {
-            conf.addNaturalSelector(new WeightedRouletteSelector(conf), true);
+        	WeightedRouletteSelector a =new WeightedRouletteSelector(conf); 
+        	System.out.println("lalala");   
+        	conf.addNaturalSelector(a , true);
         }
         else if (SELECCION == 2)//Elige los mejores - por ranking
         {
