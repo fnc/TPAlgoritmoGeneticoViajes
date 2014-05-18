@@ -77,6 +77,10 @@ public class JgapProject {
         		metodoDeSeleccionInvalido=true;
         	}
         }
+        else{
+        	metodoDeSeleccionInvalido=true;
+        }
+        
         if (metodoDeSeleccionInvalido){
         	System.out.println("Parámetros invalidos.\n El primer parámetro debe ser la cantidad de evoluciones a realizar.\n El segundo parámetro debe ser el método de selección a utilizar (Debe ser uno de los siguientes tres : ruleta, ranking, torneo).\n El tercer parámetro debe ser la cantidad de individuos de la población inicial.");
     		return;
