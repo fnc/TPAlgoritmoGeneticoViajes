@@ -261,7 +261,7 @@ public class JgapProject {
         int ambientes = ApartmentsFitness.obtenerValorGen(cromosoma, 4);
         double fitness = ApartmentsFitness.evaluar(cromosoma);
 
-        String item = "Barrio: " + barrio + " Distancia al subte: " + distancia + " Antiguedad: " + antiguedad + " Precio: " + precio + " Ambientes: " + ambientes+ "||Aptitud:"+fitness;
+        String item = "Barrio:" + barrio + " Distancia al subte:" + distancia + " Antiguedad:" + antiguedad + " Precio:" + precio + " Ambientes:" + ambientes+ "||Aptitud:"+fitness;
 
         return item;
     }
