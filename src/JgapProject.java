@@ -3,9 +3,13 @@
  * and open the template in the editor.
  */
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
+import java.util.Calendar;
+import java.text.SimpleDateFormat;
 
 import org.jgap.Chromosome;
 import org.jgap.Configuration;
@@ -28,92 +32,129 @@ import org.jgap.impl.WeightedRouletteSelector;
 // */
 public class JgapProject {
 
-    public static int CANT_EVOLUCIONES = 10000;
-    public static int POBLACION = 50;
-    public static int SELECCION = 1;
-    /*
-    private static File file = new File("c:\\Users\\Usuario\\Documents\\NetBeansProjects\\JgapProject\\resultadoTPAG.txt");
-    private static BufferedWriter buf;
+    public static int CANT_EVOLUCIONES;
+    public static int POBLACION;
+    public static int SELECCION;
+    
+    public static BufferedWriter logDelAG;
+    
+    public static final String DATE_FORMAT_NOW = "dd-MM-yyyy";
+    public static final String TIME_FORMAT_NOW = "HH-mm-ss";
+    public static String pathLogFile;
 
-    static {
-        try {
-            JgapProject.buf = new BufferedWriter(new FileWriter(file));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-*/
     /**
      * @param args
-     * @throws InvalidConfigurationException 
      * @throws IOException 
      */
     public static void main(String[] args) throws InvalidConfigurationException, IOException {
 
         POBLACION = 21;
-        CANT_EVOLUCIONES = 5;
-        SELECCION = 3;
-//		if (args.length == 2)
-//                {
-//			POBLACION = new Integer (args[0]);
-//			CANT_EVOLUCIONES = new Integer (args[1]);
-//		}
-//                else
-//                {
-//			System.out.println("Ingrese los parametros: Poblacion y cantidad de evoluciones. ");
-//			return;
-//		}
-
-
+        CANT_EVOLUCIONES = 200;
+        pathLogFile=System.getProperty("user.dir") + "\\Ejecucion TPAG - Grupo 5 - del dia " + dateNow() + " a las " + timeNow() + ".txt";
+        
+        boolean metodoDeSeleccionInvalido=true;
+        
+        if(args.length>0){
+        	
+        	if (args[0].equals("ruleta")){
+        		SELECCION = 1;
+        	}
+        	else if (args[0].equals("ranking")){
+        		SELECCION = 2;
+        	}
+        	else if (args[0].equals("torneo")){
+        		SELECCION = 3;
+        	}
+        	
+        	metodoDeSeleccionInvalido=false;
+        	
+        }
+        if (metodoDeSeleccionInvalido){
+        	System.out.println("Método de selección inválido, se debe pasar como parámetro el metodo de selección a utilizar \n (Debe ser uno de los siguientes tres : ruleta, ranking, torneo)");
+    		return;
+        }
+        
+        logDelAG = crearLogger (pathLogFile);
+        
         //Grupo 5 
 
-        System.out.println("-----------------------------------------------------------");
-        System.out.println("--   TP Algoritmos Geneticos Grupo 5                    --");
-//		System.out.println("--   Numero buscado: " + resultadoBuscado + "                            --");
-        System.out.println("--   Poblacion: " + POBLACION + "                                      --");
-        System.out.println("--   Cantidad de Evoluciones: " + CANT_EVOLUCIONES + "                       --");
-        System.out.println("--   Resultado total de ejecucion: c:\\resultadoTPAG.txt  --");
-        System.out.println("-----------------------------------------------------------");
+        imprimirPorConsolaYALogfile(logDelAG, "-----------------------------------------------------------");
+        imprimirPorConsolaYALogfile(logDelAG, "--   TP Algoritmos Geneticos Grupo 5                    --");
+        imprimirPorConsolaYALogfile(logDelAG, "--   Poblacion: " + POBLACION + "                                      --");
+        imprimirPorConsolaYALogfile(logDelAG, "--   Cantidad de Evoluciones: " + CANT_EVOLUCIONES + "                       --");
+        imprimirPorConsolaYALogfile(logDelAG, "--   Resultado total de ejecucion: " + pathLogFile + "  --");
+        imprimirPorConsolaYALogfile(logDelAG, "-----------------------------------------------------------\n");
 
-        
-        
-        
         
     	IChromosome masApto = AG();
     	
     	
         Gene[] g = masApto.getGenes();
-        System.out.println("Aptitud: " + masApto.getFitnessValue());
-        System.out.println("Barrio: " + getLocationString((Integer) g[0].getAllele()));
-        System.out.println("Cercania al subte: " + getDistanceToSubwayString((Integer) g[1].getAllele()));
-        System.out.println("Antiguedad: " + getYearsString((Integer) g[2].getAllele()));
-        System.out.println("Precio: " + getPriceString((Integer) g[3].getAllele()));
-        System.out.println("Cantidad de ambientes: " + getNumberOfRoomsString((Integer) g[4].getAllele()));
+        
+        imprimirPorConsolaYALogfile(logDelAG, "Aptitud: " + masApto.getFitnessValue());
+        imprimirPorConsolaYALogfile(logDelAG, "Barrio: " + getLocationString((Integer) g[0].getAllele()));
+        imprimirPorConsolaYALogfile(logDelAG, "Cercania al subte: " + getDistanceToSubwayString((Integer) g[1].getAllele()));
+        imprimirPorConsolaYALogfile(logDelAG, "Antiguedad: " + getYearsString((Integer) g[2].getAllele()));
+        imprimirPorConsolaYALogfile(logDelAG, "Precio: " + getPriceString((Integer) g[3].getAllele()));
+        imprimirPorConsolaYALogfile(logDelAG, "Cantidad de ambientes: " + getNumberOfRoomsString((Integer) g[4].getAllele())+"\n");
+        
+        cerrarLog(logDelAG);
 
-//		Float f = new Float(((ApartmentsFitness)ff).getValorCromosoma(masApto));
-//		System.out.println("Mejor Valor obtenido: " + f.longValue());
-
-        System.out.println();
-        //imprimo toda la poblacion
-//		imprimirPoblacion(poblacion);
-
-//		buf.close();
     }
-/*
 
-    private static void imprimirPoblacion(Genotype poblacion) throws IOException {
-        Population pop = poblacion.getPopulation();
-
-        List<Chromosome> chromos = pop.determineFittestChromosomes(POBLACION + 2);
-        buf.write("Poblacion: " + pop.size() + "\n");
-
-        for (Chromosome cromosoma : chromos) {
-            String item = getChromosomeValue(cromosoma);
-            buf.write(item + "\n");
-        }
-        buf.write("\n\n");
+    private static String dateNow() {
+    	Calendar cal = Calendar.getInstance();
+    	SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
+    	return sdf.format(cal.getTime());
     }
-*/
+
+    private static String timeNow() {
+    	Calendar cal = Calendar.getInstance();
+    	SimpleDateFormat sdf = new SimpleDateFormat(TIME_FORMAT_NOW);
+    	return sdf.format(cal.getTime());
+    }
+    
+    private static BufferedWriter crearLogger(String ruta){
+    	BufferedWriter out = null;
+    	try  
+    	{
+    	    FileWriter fstream = new FileWriter(ruta, true); //true tells to append data.
+    	    out = new BufferedWriter(fstream);
+    	}
+    	catch (IOException e)
+    	{
+    	    System.err.println("Error: " + e.getMessage());
+    	}
+    	return out;
+    }
+    
+    private static void imprimirEnLogFile(BufferedWriter logger, String textoALoggear){
+    	try  
+    	{
+    		logger.write(textoALoggear);
+    		logger.newLine();
+    	}
+    	catch (IOException e)
+    	{
+    	    System.err.println("Error: " + e.getMessage());
+    	}
+    }
+    
+    private static void imprimirPorConsolaYALogfile(BufferedWriter logger, String texto){
+    	System.out.println(texto);
+    	imprimirEnLogFile(logger, texto);
+    }
+    
+    private static void cerrarLog(BufferedWriter logger){
+    	try  
+    	{
+    		logger.close();
+    	}
+    	catch (IOException e)
+    	{
+    	    System.err.println("Error: " + e.getMessage());
+    	}
+    }
     
     private static IChromosome AG() throws InvalidConfigurationException{
     	Configuration conf = new DefaultConfiguration();
@@ -146,13 +187,9 @@ public class JgapProject {
         conf.setPopulationSize(POBLACION);
 
 
-//        conf.removeNaturalSelectors(true);
-//        conf.removeNaturalSelectors(false);
         if(SELECCION == 1)//Seleccion por ruleta
         {
-        	WeightedRouletteSelector a =new WeightedRouletteSelector(conf); 
-        	System.out.println("lalala");   
-        	conf.addNaturalSelector(a , true);
+        	conf.addNaturalSelector(new WeightedRouletteSelector(conf), true);
         }
         else if (SELECCION == 2)//Elige los mejores - por ranking
         {
@@ -189,43 +226,30 @@ public class JgapProject {
             }
 //            imprimirPoblacion(poblacion);
 
-            imprimirPoblacionConsola(poblacion);
-            //solo imprime los cambios
-//			if(antfitnes != elMasMejor.getFitnessValue()){
-//				Float dif = FactorsFitness.getValorCromosoma(elMasMejor) - resultadoBuscado;
-//				if(dif < 0)
-//					dif = dif * -1;
-//
-//				System.out.println("Fitnes Values " + elMasMejor.getFitnessValue() + " \t Dif: " + dif.longValue() +  " -- solucion parcial: " + FactorsFitness.getValorCromosoma(elMasMejor));
-//				antfitnes = elMasMejor.getFitnessValue();
-//			}
-            //si encuentro el valor corto la busqueda
-            double fitnessValue = masApto.getFitnessValue();
-//            if(fitnessValue == 50.0)
-//                        {
-//				System.out.println("###############################################################################");
-//				System.out.println("## R E S U L T A D O   E N C O N T R A D O !! cantidad de evoluciones: " + i);
-//				System.out.println("###############################################################################");
-//				break;
-//			}
+            imprimirPoblacion(poblacion);
+
+            //double fitnessValue = masApto.getFitnessValue();
+
         }
-        System.out.println("--------------||Cantidad de evoluciones: " + i);
+        
+        imprimirPorConsolaYALogfile(logDelAG, "\n--------------||Cantidad de evoluciones: " + String.valueOf(i));
         return masApto;
     }
     
-    private static void imprimirPoblacionConsola(Genotype poblacion) {
+    private static void imprimirPoblacion(Genotype poblacion) {
 
         Population pop = poblacion.getPopulation();
 
         List<Chromosome> chromos = pop.determineFittestChromosomes(POBLACION + 2);
-        System.out.println("poblacion: " + pop.size());
+        imprimirPorConsolaYALogfile(logDelAG, "poblacion: " + pop.size());
 
         for (Chromosome cromosoma : chromos) {
             String item = getChromosomeValue(cromosoma);
-            System.out.print(item + " ");
-            System.out.println();
+            
+            imprimirPorConsolaYALogfile(logDelAG, item );
         }
-        System.out.println();
+        
+        imprimirPorConsolaYALogfile(logDelAG, "");
 
     }
 
