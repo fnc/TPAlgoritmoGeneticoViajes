@@ -3,9 +3,6 @@
  * and open the template in the editor.
  */
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
@@ -19,19 +16,21 @@ import org.jgap.IChromosome;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.Population;
 import org.jgap.impl.AveragingCrossoverOperator;
+import org.jgap.impl.BestChromosomesSelector;
 import org.jgap.impl.DefaultConfiguration;
 import org.jgap.impl.IntegerGene;
 import org.jgap.impl.MutationOperator;
-import org.jgap.impl.StandardPostSelector;
+import org.jgap.impl.ThresholdSelector;
+import org.jgap.impl.WeightedRouletteSelector;
 
-/**
- *
- * @author Usuario
- */
+        
+// * @author Usuario
+// */
 public class JgapProject {
 
     public static int CANT_EVOLUCIONES = 10000;
     public static int POBLACION = 50;
+    public static int SELECCION = 1;
     /*
     private static File file = new File("c:\\Users\\Usuario\\Documents\\NetBeansProjects\\JgapProject\\resultadoTPAG.txt");
     private static BufferedWriter buf;
@@ -51,8 +50,9 @@ public class JgapProject {
      */
     public static void main(String[] args) throws InvalidConfigurationException, IOException {
 
-        POBLACION = 10;
-        CANT_EVOLUCIONES = 200;
+        POBLACION = 21;
+        CANT_EVOLUCIONES = 5;
+        SELECCION = 2;
 //		if (args.length == 2)
 //                {
 //			POBLACION = new Integer (args[0]);
@@ -146,14 +146,22 @@ public class JgapProject {
         conf.setPopulationSize(POBLACION);
 
 
-        conf.removeNaturalSelectors(true);
-        conf.removeNaturalSelectors(false);
+//        conf.removeNaturalSelectors(true);
+//        conf.removeNaturalSelectors(false);
+        if(SELECCION == 1)//Seleccion por ruleta
+        {
+            conf.addNaturalSelector(new WeightedRouletteSelector(conf), true);
+        }
+        else if (SELECCION == 2)//Elige los mejores - por ranking
+        {
+            conf.addNaturalSelector(new BestChromosomesSelector(conf), true);
+        }
+        else if (SELECCION == 3)//Seleccion por torneo
+        {
+            conf.addNaturalSelector(new ThresholdSelector(conf,1), true);
+        }
+        
         conf.addGeneticOperator(new AveragingCrossoverOperator(conf));
-        conf.addNaturalSelector(new StandardPostSelector(conf), false);
-        //conf.addNaturalSelector(new ThresholdSelector(conf, 1), true);
-        //conf.addNaturalSelector(new BestChromosomesSelector(conf, 0.1), false);
-
-
 
         Genotype poblacion = Genotype.randomInitialGenotype(conf);
 
