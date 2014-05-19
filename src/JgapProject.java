@@ -37,10 +37,12 @@ public class JgapProject {
     public static int SELECCION;
     
     public static BufferedWriter logDelAG;
+    public static BufferedWriter logGráfico;
     
     public static final String DATE_FORMAT_NOW = "dd-MM-yyyy";
     public static final String TIME_FORMAT_NOW = "HH-mm-ss";
     public static String pathLogFile;
+    public static String pathLogGrafico;
     
     public static int generacionMejorInd;
 
@@ -53,6 +55,7 @@ public class JgapProject {
     public static void main(String[] args) throws InvalidConfigurationException, IOException {
 
         pathLogFile=System.getProperty("user.dir") + "\\Ejecucion TPAG - Grupo 5 - del dia " + dateNow() + " a las " + timeNow() + ".txt";
+        pathLogGrafico=System.getProperty("user.dir") + "\\Puntos Grafico - Ejecucion TPAG - Grupo 5 - del dia " + dateNow() + " a las " + timeNow() + ".txt";
         
         boolean metodoDeSeleccionInvalido=false;
         
@@ -88,6 +91,7 @@ public class JgapProject {
         }
         
         logDelAG = crearLogger (pathLogFile);
+        logGráfico = crearLogger (pathLogGrafico);
         
         //Grupo 5 
 
@@ -113,6 +117,7 @@ public class JgapProject {
         imprimirPorConsolaYALogfile(logDelAG, "Cantidad de ambientes: " + getNumberOfRoomsString((Integer) g[4].getAllele())+"\n");
         
         cerrarLog(logDelAG);
+        cerrarLog(logGráfico);
 
     }
 
@@ -240,14 +245,17 @@ public class JgapProject {
         	  List<Chromosome> aMutar = pop.determineFittestChromosomes(POBLACION);
         	  mutador.operate(pop, aMutar);
         	  }
-        	// imprimirPoblacion(poblacion);
+        	// imprimirPoblacion
 
-        	  
         	  imprimirPorConsolaYALogfile(logDelAG, "Generacion: " + String.valueOf(i+1));
         	  imprimirPoblacion(poblacion);
         	  
         	  IChromosome masAptoPob = poblacion.getFittestChromosome();
         	  double fitPob = masAptoPob.getFitnessValueDirectly();
+        	  
+        	  imprimirEnLogFile(logGráfico,"Generacion: " + String.valueOf(i+1) +"   Valor mejor aptitud: " + String.valueOf(fitPob));
+        	  imprimirEnLogFile(logGráfico," ");
+        	  
         	  double fitTot=0;
         	  if(masApto != null){
         	  fitTot = masApto.getFitnessValueDirectly();
@@ -286,7 +294,7 @@ public class JgapProject {
         int antiguedad = ApartmentsFitness.obtenerValorGen(cromosoma, 2);
         int precio = ApartmentsFitness.obtenerValorGen(cromosoma, 3);
         int ambientes = ApartmentsFitness.obtenerValorGen(cromosoma, 4);
-        double fitness = ApartmentsFitness.evaluar(cromosoma);
+        double fitness = cromosoma.getFitnessValueDirectly();
 
         String item = "Barrio:" + barrio + " Distancia al subte:" + distancia + " Antiguedad:" + antiguedad + " Precio:" + precio + " Ambientes:" + ambientes+ "||Aptitud:"+fitness;
 
