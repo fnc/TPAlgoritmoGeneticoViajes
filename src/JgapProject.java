@@ -41,6 +41,8 @@ public class JgapProject {
     public static final String DATE_FORMAT_NOW = "dd-MM-yyyy";
     public static final String TIME_FORMAT_NOW = "HH-mm-ss";
     public static String pathLogFile;
+    
+    public static int generacionMejorInd;
 
     /**
      * @param args[0]Cantidad de evoluciones
@@ -80,7 +82,6 @@ public class JgapProject {
         else{
         	metodoDeSeleccionInvalido=true;
         }
-        
         if (metodoDeSeleccionInvalido){
         	System.out.println("Parámetros invalidos.\n El primer parámetro debe ser la cantidad de evoluciones a realizar.\n El segundo parámetro debe ser el método de selección a utilizar (Debe ser uno de los siguientes tres : ruleta, ranking, torneo).\n El tercer parámetro debe ser la cantidad de individuos de la población inicial.");
     		return;
@@ -103,6 +104,7 @@ public class JgapProject {
     	
         Gene[] g = masApto.getGenes();
         
+        imprimirPorConsolaYALogfile(logDelAG, "Generacion: " + String.valueOf(generacionMejorInd));
         imprimirPorConsolaYALogfile(logDelAG, "Aptitud: " + masApto.getFitnessValue());
         imprimirPorConsolaYALogfile(logDelAG, "Barrio: " + getLocationString((Integer) g[0].getAllele()));
         imprimirPorConsolaYALogfile(logDelAG, "Cercania al subte: " + getDistanceToSubwayString((Integer) g[1].getAllele()));
@@ -226,22 +228,35 @@ public class JgapProject {
         int i = 0 ;
         for ( i = 0; i < CANT_EVOLUCIONES; i++) {
 
-            poblacion.evolve();
-            masApto = poblacion.getFittestChromosome();
+        	
+        	
+        	poblacion.evolve();
+        	   
 
-            //Si el random es masyor a 0.5 mando una mutacion
-            Random rn = new Random();
-            if (rn.nextFloat()>0.5) {
-                Population pop = poblacion.getPopulation();
-                List<Chromosome> aMutar = pop.determineFittestChromosomes(POBLACION);
-                mutador.operate(pop, aMutar);
-            }
-//            imprimirPoblacion(poblacion);
+        	  //Si el random es masyor a 0.5 mando una mutacion
+        	  Random rn = new Random();
+        	  if (rn.nextFloat()>0.5) {
+        	  Population pop = poblacion.getPopulation();
+        	  List<Chromosome> aMutar = pop.determineFittestChromosomes(POBLACION);
+        	  mutador.operate(pop, aMutar);
+        	  }
+        	// imprimirPoblacion(poblacion);
 
-            imprimirPoblacion(poblacion);
-
-            //double fitnessValue = masApto.getFitnessValue();
-
+        	  
+        	  imprimirPorConsolaYALogfile(logDelAG, "Generacion: " + String.valueOf(i+1));
+        	  imprimirPoblacion(poblacion);
+        	  
+        	  IChromosome masAptoPob = poblacion.getFittestChromosome();
+        	  double fitPob = masAptoPob.getFitnessValueDirectly();
+        	  double fitTot=0;
+        	  if(masApto != null){
+        	  fitTot = masApto.getFitnessValueDirectly();
+        	  }
+        	  if(fitPob > fitTot){
+        		  generacionMejorInd=i+1;
+        		  masApto=masAptoPob;
+        	  }
+        	  
         }
         
         imprimirPorConsolaYALogfile(logDelAG, "\n--------------||Cantidad de evoluciones: " + String.valueOf(i));
